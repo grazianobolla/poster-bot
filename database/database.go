@@ -18,9 +18,12 @@ type MediaInfo struct {
 }
 
 //starts the database file connection
-func Start(database_name string) {
-	d, err := sql.Open("sqlite3", database_name)
-	shared.CheckError(err)
+func Start(database_path string) {
+	d, err := sql.Open("sqlite3", database_path)
+	if shared.CheckError(err) {
+		panic("Couldnt open the database!")
+	}
+
 	database = d
 
 	//create table
@@ -29,7 +32,7 @@ func Start(database_name string) {
 		fmt.Println(res)
 	}
 
-	fmt.Println("Database opened", database_name)
+	fmt.Println("Database opened", database_path)
 }
 
 //saves a media info struct on the database

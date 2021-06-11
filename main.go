@@ -13,11 +13,11 @@ import (
 )
 
 func main() {
-	var discord_token, database_name string
+	var discord_token, database_path string
 	var access_token, access_token_secret, consumer_key, consumer_key_secret, tenor_token string
 
 	flag.StringVar(&discord_token, "d", "", "Discord Token")
-	flag.StringVar(&discord_token, "db", "", "Database Name")
+	flag.StringVar(&database_path, "db", "", "Database Name")
 
 	//TODO: modularizar las redes sociales
 	flag.StringVar(&access_token, "ta", "", "Twitter Access Token")
@@ -27,12 +27,16 @@ func main() {
 	flag.StringVar(&tenor_token, "tt", "", "Tenor Token")
 	flag.Parse()
 
+	if database_path == "" {
+		fmt.Println("Missing Database Path")
+	}
+
 	if discord_token == "" || access_token == "" || access_token_secret == "" || consumer_key == "" || consumer_key_secret == "" || tenor_token == "" {
 		fmt.Println("Missing tokens")
 		return
 	}
 
-	database.Start(database_name)
+	database.Start(database_path)
 	tenor.Start(tenor_token)
 	go twitter.Start(access_token, access_token_secret, consumer_key, consumer_key_secret)
 	go discord.Start(discord_token)
