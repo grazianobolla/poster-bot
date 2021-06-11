@@ -29,7 +29,7 @@ func Start(database_name string) {
 		fmt.Println(res)
 	}
 
-	fmt.Println("Database openeed")
+	fmt.Println("Database opened", database_name)
 }
 
 //saves a media info struct on the database

@@ -2,7 +2,6 @@ package discord
 
 import (
 	"fmt"
-	"math/rand"
 	"net/http"
 	"regexp"
 	"shitposter-bot/shared"
@@ -23,9 +22,6 @@ const ERROR_EMOJI = "\xE2\x9D\x8C"
 //keyword used to prevent an asset from being marked ass uploadable
 const CANCEL_KEYWORD = "ANTIFUNA"
 
-//how often will the bot remind users about its functions
-const REMINDER_FREQUENCY = 50
-
 //discord client connection
 var client *discordgo.Session
 
@@ -36,7 +32,7 @@ func Start(token string) {
 
 func Stop() {
 	client.Close()
-	fmt.Println("Virgobot Discord stopped running")
+	fmt.Println("Shitposter Bot Discord stopped running")
 }
 
 //starts the listening
@@ -56,7 +52,7 @@ func start_connection(token string) {
 		return
 	}
 
-	fmt.Println("Virgobot Discord is now running")
+	fmt.Println("Shitposter Bot Discord is now running")
 
 }
 
@@ -86,11 +82,6 @@ func message_create(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 		if !add_reaction(m.ChannelID, m.ID, UPLOAD_EMOJI) {
 			return
-		}
-
-		//temp
-		if rand.Intn(REMINDER_FREQUENCY) == 0 {
-			s.ChannelMessageSend(m.ChannelID, "Acordate que clickeando en la flecha podes subir ese meme automaticamente a Twitter (@virgocuevabot).")
 		}
 
 		temp_asset := Asset{

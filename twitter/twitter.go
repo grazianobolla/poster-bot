@@ -13,13 +13,13 @@ var client *anaconda.TwitterApi
 //starts the twitter client
 func Start(access_token string, access_token_secret string, consumer_key string, consumer_key_secret string) {
 	client = anaconda.NewTwitterApiWithCredentials(access_token, access_token_secret, consumer_key, consumer_key_secret)
-	fmt.Println("Virgobot Twitter is now running")
+	fmt.Println("Shitposter Bot Twitter is now running")
 }
 
 //stops the twitter client
 func Stop() {
 	client.Close()
-	fmt.Println("Virgobot Twitter stopped running")
+	fmt.Println("Shitposter Bot Twitter stopped running")
 }
 
 //tweets asset, coming from the URL: has to be a file
