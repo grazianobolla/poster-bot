@@ -11,6 +11,7 @@ require (
 	github.com/dustin/gojson v0.0.0-20160307161227-2e71ec9dd5ad // indirect
 	github.com/garyburd/go-oauth v0.0.0-20180319155456-bca2e7f09a17 // indirect
 	github.com/jkershaw2000/go-tenor v0.0.0-20200728191921-3f3fd5c10bc8
+	github.com/joho/godotenv v1.3.0 // indirect
 	github.com/mattn/go-sqlite3 v1.14.7
 	golang.org/x/net v0.0.0-20210610132358-84b48f89b13b // indirect
 )

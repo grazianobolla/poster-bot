@@ -1,44 +1,48 @@
 package main
 
 import (
-	"flag"
 	"fmt"
+	"log"
 	"os"
 	"os/signal"
+	"syscall"
+
 	"shitposter-bot/database"
 	"shitposter-bot/discord"
 	"shitposter-bot/tenor"
 	"shitposter-bot/twitter"
-	"syscall"
+
+	"github.com/joho/godotenv"
 )
 
+func init() {
+  // loads values from .env into the system
+  if err := godotenv.Load(); err != nil {
+    log.Print("No .env file found")
+  }
+}
+
 func main() {
-	var discord_token, database_path string
-	var access_token, access_token_secret, consumer_key, consumer_key_secret, tenor_token string
-
-	flag.StringVar(&discord_token, "d", "", "Discord Token")
-	flag.StringVar(&database_path, "db", "", "Database Name")
-
-	//TODO: modularizar las redes sociales
-	flag.StringVar(&access_token, "ta", "", "Twitter Access Token")
-	flag.StringVar(&access_token_secret, "tas", "", "Twitter Access Token Secret")
-	flag.StringVar(&consumer_key, "tc", "", "Twitter Consumer Token")
-	flag.StringVar(&consumer_key_secret, "tcs", "", "Twitter Consumer Token Secret")
-	flag.StringVar(&tenor_token, "tt", "", "Tenor Token")
-	flag.Parse()
+  discord_token := os.Getenv("DISCORD_TOKEN")
+  database_path := os.Getenv("DB_PATH")
+  tw_access_token := os.Getenv("TW_ACCESS_TOKEN")
+  tw_access_token_secret := os.Getenv("TW_ACCESS_TOKEN_SECRET")
+  tw_consumer_key := os.Getenv("TW_CONSUMER_KEY")
+  tw_consumer_key_secret := os.Getenv("TW_CONSUMER_KEY_SECRET=")
+  tenor_token := os.Getenv("TENOR_TOKEN")
 
 	if database_path == "" {
 		fmt.Println("Missing Database Path")
 	}
 
-	if discord_token == "" || access_token == "" || access_token_secret == "" || consumer_key == "" || consumer_key_secret == "" || tenor_token == "" {
+	if discord_token == "" || tw_access_token == "" || tw_access_token_secret == "" || tw_consumer_key == "" || tw_consumer_key_secret == "" || tenor_token == "" {
 		fmt.Println("Missing tokens")
 		return
 	}
 
 	database.Start(database_path)
 	tenor.Start(tenor_token)
-	go twitter.Start(access_token, access_token_secret, consumer_key, consumer_key_secret)
+	go twitter.Start(tw_access_token, tw_access_token_secret, tw_consumer_key, tw_consumer_key_secret)
 	go discord.Start(discord_token)
 
 	//wait until we want to stop the program
