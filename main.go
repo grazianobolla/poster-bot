@@ -31,7 +31,7 @@ func main() {
 	tw_access_token := os.Getenv("TW_ACCESS_TOKEN")
 	tw_access_token_secret := os.Getenv("TW_ACCESS_TOKEN_SECRET")
 	tw_consumer_key := os.Getenv("TW_CONSUMER_KEY")
-	tw_consumer_key_secret := os.Getenv("TW_CONSUMER_KEY_SECRET=")
+	tw_consumer_key_secret := os.Getenv("TW_CONSUMER_KEY_SECRET")
 	tenor_token := os.Getenv("TENOR_TOKEN")
 
 	if database_path == "" {
