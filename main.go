@@ -36,6 +36,7 @@ func main() {
 
 	if database_path == "" {
 		fmt.Println("Missing Database Path")
+		return
 	}
 
 	if discord_token == "" || tw_access_token == "" || tw_access_token_secret == "" || tw_consumer_key == "" || tw_consumer_key_secret == "" || tenor_token == "" {
