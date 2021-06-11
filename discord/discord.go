@@ -48,7 +48,7 @@ func start_connection(token string) {
 	//open the websocket and start listening
 	err = client.Open()
 	if shared.CheckError(err) {
-		fmt.Println("Can't start Discord connection")
+		print("Can't start Discord connection")
 		return
 	}
 

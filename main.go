@@ -2,13 +2,13 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"os/signal"
 	"syscall"
 
 	"shitposter-bot/database"
 	"shitposter-bot/discord"
+	"shitposter-bot/shared"
 	"shitposter-bot/tenor"
 	"shitposter-bot/twitter"
 
@@ -16,20 +16,21 @@ import (
 )
 
 func init() {
-  // loads values from .env into the system
-  if err := godotenv.Load(); err != nil {
-    log.Print("No .env file found")
-  }
+	// loads values from .env into the system
+	err := godotenv.Load()
+	if shared.CheckError(err) {
+		panic("Couldn't load env file")
+	}
 }
 
 func main() {
-  discord_token := os.Getenv("DISCORD_TOKEN")
-  database_path := os.Getenv("DB_PATH")
-  tw_access_token := os.Getenv("TW_ACCESS_TOKEN")
-  tw_access_token_secret := os.Getenv("TW_ACCESS_TOKEN_SECRET")
-  tw_consumer_key := os.Getenv("TW_CONSUMER_KEY")
-  tw_consumer_key_secret := os.Getenv("TW_CONSUMER_KEY_SECRET=")
-  tenor_token := os.Getenv("TENOR_TOKEN")
+	discord_token := os.Getenv("DISCORD_TOKEN")
+	database_path := os.Getenv("DB_PATH")
+	tw_access_token := os.Getenv("TW_ACCESS_TOKEN")
+	tw_access_token_secret := os.Getenv("TW_ACCESS_TOKEN_SECRET")
+	tw_consumer_key := os.Getenv("TW_CONSUMER_KEY")
+	tw_consumer_key_secret := os.Getenv("TW_CONSUMER_KEY_SECRET=")
+	tenor_token := os.Getenv("TENOR_TOKEN")
 
 	if database_path == "" {
 		fmt.Println("Missing Database Path")
