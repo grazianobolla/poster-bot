@@ -108,12 +108,10 @@ func message_reaction_add(s *discordgo.Session, m *discordgo.MessageReactionAdd)
 	//if we clicked the upload emoji, check if the asset exists and then upload
 	if m.Emoji.Name == UPLOAD_EMOJI {
 		if is_asset, asset := is_asset(m.MessageID); is_asset && !asset.Uploaded {
+			asset.Uploaded = true
+
 			if uploader.UploadAsset(asset.AuthorName, asset.Text, asset.Url) {
-				asset.Uploaded = true
-
-				//s.ChannelMessageSend(m.ChannelID, "El asset fue subido a Twitter!")
 				add_reaction(m.ChannelID, m.MessageID, CHECK_MARK_EMOJI)
-
 			} else {
 				add_reaction(m.ChannelID, m.MessageID, ERROR_EMOJI)
 			}
