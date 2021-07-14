@@ -1,5 +1,5 @@
 # shitposter-bot
-Automatically Upload Discord Memes to Social Networks!
+## Automatically Upload Discord Memes to Social Networks!
 
 - Upload the meme to Discord
 
