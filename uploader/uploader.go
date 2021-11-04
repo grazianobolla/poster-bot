@@ -8,20 +8,7 @@ import (
 	"shitposter-bot/hasher"
 	"shitposter-bot/shared"
 	"shitposter-bot/twitter"
-	"strings"
 )
-
-func UploadAsset(author string, text string, url string) bool {
-	mime := shared.GetContentType(url)
-
-	if strings.Contains(mime, "image") {
-		return upload_image(author, text, url)
-	} else if strings.Contains(mime, "video") {
-		return upload_video(author, text, url)
-	}
-
-	return false
-}
 
 func upload_video(author string, text string, url string) bool {
 	if media_bytes, ok := retrieve_data_as_bytes(url); ok {

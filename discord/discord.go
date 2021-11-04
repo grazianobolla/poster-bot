@@ -26,16 +26,6 @@ const CANCEL_KEYWORD = "ANTIFUNA"
 //discord client connection
 var client *discordgo.Session
 
-func Start(token string) {
-	go destroy_ticker()
-	start_connection(token)
-}
-
-func Stop() {
-	client.Close()
-	fmt.Println("Shitposter Bot Discord stopped running")
-}
-
 func create_commands() {
 	for _, v := range cmd_array {
 		_, err := client.ApplicationCommandCreate(client.State.User.ID, "", v)
