@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"os"
 	"os/signal"
 	"syscall"
@@ -19,7 +19,7 @@ func init() {
 	// loads values from .env into the system
 	err := godotenv.Load()
 	if shared.CheckError(err) {
-		panic("Couldn't load env file")
+		log.Fatal("Couldn't load env file")
 	}
 }
 
@@ -35,12 +35,12 @@ func main() {
 	tenor_token := os.Getenv("TENOR_TOKEN")
 
 	if database_path == "" {
-		fmt.Println("Missing Database Path")
+		log.Fatal("Missing Database Path")
 		return
 	}
 
 	if discord_token == "" || tw_access_token == "" || tw_access_token_secret == "" || tw_consumer_key == "" || tw_consumer_key_secret == "" || tenor_token == "" {
-		fmt.Println("Missing tokens")
+		log.Fatal("Missing tokens")
 		return
 	}
 

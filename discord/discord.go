@@ -2,6 +2,7 @@ package discord
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"regexp"
 	"shitposter-bot/shared"
@@ -35,6 +36,24 @@ func Stop() {
 	fmt.Println("Shitposter Bot Discord stopped running")
 }
 
+func create_commands() {
+	for _, v := range cmd_array {
+		_, err := client.ApplicationCommandCreate(client.State.User.ID, "", v)
+
+		if shared.CheckError(err) {
+			log.Fatalf("Cannot create '%v' command: %v", v.Name, err)
+		}
+	}
+}
+
+func add_command_handlers() {
+	client.AddHandler(func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+		if h, ok := cmd_handler_array[i.ApplicationCommandData().Name]; ok {
+			h(s, i)
+		}
+	})
+}
+
 //starts the listening
 func start_connection(token string) {
 	var err error
@@ -45,15 +64,18 @@ func start_connection(token string) {
 	client.AddHandler(message_create)
 	client.AddHandler(message_reaction_add)
 
+	add_command_handlers()
+
 	//open the websocket and start listening
 	err = client.Open()
 	if shared.CheckError(err) {
-		print("Can't start Discord connection")
+		log.Fatal("Can't start Discord connection")
 		return
 	}
 
-	fmt.Println("Shitposter Bot Discord is now running")
+	create_commands()
 
+	fmt.Println("Shitposter Bot Discord is now up and running")
 }
 
 //called when the bot connects to a guild
@@ -76,7 +98,9 @@ func message_create(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	if url, text, ok := get_media_url_text(m); ok {
-		if !strings.Contains(get_content_type(url), "image") {
+		mime := shared.GetContentType(url)
+
+		if !strings.Contains(mime, "image") && !strings.Contains(mime, "video") {
 			return
 		}
 
@@ -110,7 +134,8 @@ func message_reaction_add(s *discordgo.Session, m *discordgo.MessageReactionAdd)
 		if is_asset, asset := is_asset(m.MessageID); is_asset && !asset.Uploaded {
 			asset.Uploaded = true
 
-			if uploader.UploadAsset(asset.AuthorName, asset.Text, asset.Url) {
+			//if uploader.UploadAsset(asset.AuthorName, asset.Text, asset.Url) {
+			if uploader.UploadAsset(asset.AuthorName, "", asset.Url) {
 				add_reaction(m.ChannelID, m.MessageID, CHECK_MARK_EMOJI)
 			} else {
 				add_reaction(m.ChannelID, m.MessageID, ERROR_EMOJI)
@@ -180,15 +205,4 @@ func add_reaction(channelID string, messageID string, emoji string) bool {
 	}
 
 	return false
-}
-
-func get_content_type(url string) string {
-	res, err := http.Get(url)
-	if shared.CheckError(err) {
-		return ""
-	}
-
-	t := res.Header.Get("Content-Type")
-	fmt.Println(url, t)
-	return t
 }

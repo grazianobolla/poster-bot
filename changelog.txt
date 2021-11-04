@@ -1,0 +1,3 @@
+Changelog 4/11
+- Tweets will no longer contain any text.
+- You can now upload videos!

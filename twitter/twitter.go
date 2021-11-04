@@ -22,7 +22,19 @@ func Stop() {
 	fmt.Println("Shitposter Bot Twitter stopped running")
 }
 
-//tweets asset, coming from the URL: has to be a file
+func tweet(mediaId string, text string) (anaconda.Tweet, bool) {
+	//post the tweet
+	v := url.Values{}
+	v.Set("media_ids", mediaId)
+	tweet, e := client.PostTweet(text, v)
+
+	if !shared.CheckError(e) {
+		fmt.Println("Posted media to Twitter ", mediaId)
+	}
+
+	return tweet, !shared.CheckError(e)
+}
+
 func TweetImage(author string, text string, base64media string) (int64, bool) {
 	//upload image to tweeter
 	media, err := client.UploadMedia(base64media)
@@ -30,14 +42,58 @@ func TweetImage(author string, text string, base64media string) (int64, bool) {
 		return 0, false
 	}
 
-	v := url.Values{}
-	v.Set("media_ids", media.MediaIDString)
-
 	//post the tweet
-	tweet, e := client.PostTweet(" ", v)
-	if shared.CheckError(e) {
+	tweet, ok := tweet(media.MediaIDString, text)
+
+	if ok {
+		return tweet.Id, true
+	}
+
+	return 0, false
+}
+
+func TweetVideo(author string, text string, data []byte) (int64, bool) {
+	size_bytes := len(data)
+
+	media, err := client.UploadVideoInit(size_bytes, "video/mp4")
+
+	if shared.CheckError(err) {
 		return 0, false
 	}
 
-	return tweet.Id, true
+	chunk_idx := 0
+
+	for i := 0; i < size_bytes; i += 500000 {
+		fmt.Println("Uploading video chunk", chunk_idx)
+
+		chunk_size := 500000
+
+		if i+chunk_size > size_bytes {
+			chunk_size = size_bytes - i
+		}
+
+		err = client.UploadVideoAppend(media.MediaIDString, chunk_idx, shared.ToBase64(data[i:i+chunk_size]))
+
+		if shared.CheckError(err) {
+			fmt.Println("Error uploading chunk")
+			return 0, false
+		}
+
+		chunk_idx++
+	}
+
+	video, err := client.UploadVideoFinalize(media.MediaIDString)
+
+	if shared.CheckError(err) {
+		return 0, false
+	}
+
+	//post the tweet
+	tweet, ok := tweet(video.MediaIDString, text)
+
+	if ok {
+		return tweet.Id, true
+	}
+
+	return 0, false
 }

@@ -3,6 +3,7 @@ package database
 import (
 	"database/sql"
 	"fmt"
+	"log"
 	"shitposter-bot/shared"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -21,7 +22,7 @@ type MediaInfo struct {
 func Start(database_path string) {
 	d, err := sql.Open("sqlite3", database_path)
 	if shared.CheckError(err) {
-		panic("Couldnt open the database!")
+		log.Fatal("Couldnt open the database!")
 	}
 
 	database = d
@@ -29,7 +30,7 @@ func Start(database_path string) {
 	//create table
 	res, err := database.Exec("CREATE TABLE IF NOT EXISTS media_info (author TEXT, tweet_id INTEGER, media_hash TEXT UNIQUE, media_url TEXT UNIQUE);")
 	if shared.CheckError(err) {
-		fmt.Println(res)
+		log.Fatal(res)
 	}
 
 	fmt.Println("Database opened", database_path)
@@ -56,11 +57,12 @@ func AssetAlreadyUploaded(hash string, url string) bool {
 		rows.Scan(&stored_hash, &stored_url)
 
 		if hash == stored_hash || url == stored_url {
+			fmt.Println("Database match found, aborting upload")
 			return true
 		}
 	}
 
-	fmt.Println("Database match found, aborting upload")
+	fmt.Println("Coudln't find a match, proceding!")
 	return false
 }
 
