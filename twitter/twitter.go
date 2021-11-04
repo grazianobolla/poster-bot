@@ -34,7 +34,7 @@ func TweetImage(author string, text string, base64media string) (int64, bool) {
 	v.Set("media_ids", media.MediaIDString)
 
 	//post the tweet
-	tweet, e := client.PostTweet(fmt.Sprintf("%s: %s", author, text), v)
+	tweet, e := client.PostTweet(" ", v)
 	if shared.CheckError(e) {
 		return 0, false
 	}
