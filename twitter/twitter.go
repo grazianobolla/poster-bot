@@ -63,6 +63,7 @@ func TweetVideo(author string, text string, data []byte) (int64, bool) {
 
 	chunk_idx := 0
 
+	//separates the video in 500000bytes chunks and uploads them one at the time
 	for i := 0; i < size_bytes; i += 500000 {
 		fmt.Println("Uploading video chunk", chunk_idx)
 

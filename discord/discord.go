@@ -137,6 +137,7 @@ func message_reaction_add(s *discordgo.Session, m *discordgo.MessageReactionAdd)
 			//if uploader.UploadAsset(asset.AuthorName, asset.Text, asset.Url) {
 			if uploader.UploadAsset(asset.AuthorName, "", asset.Url) {
 				add_reaction(m.ChannelID, m.MessageID, CHECK_MARK_EMOJI)
+				//TODO: register upload here
 			} else {
 				add_reaction(m.ChannelID, m.MessageID, ERROR_EMOJI)
 			}
