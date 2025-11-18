@@ -3,6 +3,7 @@ package instagram
 import (
 	"fmt"
 	"shitposter-bot/shared"
+	"time"
 
 	fb "github.com/huandu/facebook/v2"
 )
@@ -22,6 +23,8 @@ func Stop() {
 
 func PostImage(author string, text string, url string) (string, bool) {
 	mediaId, err := createContainerImage(url)
+	fmt.Println("Ig: generated mediaId for image ", mediaId, " waiting 5 seconds...")
+	time.Sleep(5 * time.Second)
 
 	if shared.CheckError(err) {
 		return "", false
@@ -30,7 +33,7 @@ func PostImage(author string, text string, url string) (string, bool) {
 	err = publishMedia(mediaId)
 
 	if !shared.CheckError(err) {
-		fmt.Println("Posted image to Instagram", author, text, url)
+		fmt.Println("Ig: Posted image to Instagram", author, text, url)
 		return mediaId, true
 	}
 
@@ -39,6 +42,8 @@ func PostImage(author string, text string, url string) (string, bool) {
 
 func PostVideo(author string, text string, url string) (string, bool) {
 	mediaId, err := createContainerVideo(url)
+	fmt.Println("Ig: generated mediaId for video ", mediaId, " waiting 10 seconds...")
+	time.Sleep(10 * time.Second)
 
 	if shared.CheckError(err) {
 		return "", false
@@ -47,7 +52,7 @@ func PostVideo(author string, text string, url string) (string, bool) {
 	err = publishMedia(mediaId)
 
 	if !shared.CheckError(err) {
-		fmt.Println("Posted video to Instagram", author, text, url)
+		fmt.Println("Ig: Posted video to Instagram", author, text, url)
 		return mediaId, true
 	}
 
