@@ -26,24 +26,6 @@ const CANCEL_KEYWORD = "ANTIFUNA"
 // discord client connection
 var client *discordgo.Session
 
-func create_commands() {
-	for _, v := range cmd_array {
-		_, err := client.ApplicationCommandCreate(client.State.User.ID, "", v)
-
-		if shared.CheckError(err) {
-			log.Fatalf("Cannot create '%v' command: %v", v.Name, err)
-		}
-	}
-}
-
-func add_command_handlers() {
-	client.AddHandler(func(s *discordgo.Session, i *discordgo.InteractionCreate) {
-		if h, ok := cmd_handler_array[i.ApplicationCommandData().Name]; ok {
-			h(s, i)
-		}
-	})
-}
-
 // starts the listening
 func start_connection(token string) {
 	var err error
@@ -54,16 +36,12 @@ func start_connection(token string) {
 	client.AddHandler(message_create)
 	client.AddHandler(message_reaction_add)
 
-	add_command_handlers()
-
 	//open the websocket and start listening
 	err = client.Open()
 	if shared.CheckError(err) {
 		log.Fatal("Can't start Discord connection")
 		return
 	}
-
-	create_commands()
 
 	fmt.Println("Shitposter Bot Discord is now up and running")
 }
