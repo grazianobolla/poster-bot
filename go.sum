@@ -2,6 +2,8 @@ github.com/ChimeraCoder/anaconda v2.0.0+incompatible h1:F0eD7CHXieZ+VLboCD5UAqCe
 github.com/ChimeraCoder/anaconda v2.0.0+incompatible/go.mod h1:TCt3MijIq3Qqo9SBtuW/rrM4x7rDfWqYWHj8T7hLcLg=
 github.com/ChimeraCoder/tokenbucket v0.0.0-20131201223612-c5a927568de7 h1:r+EmXjfPosKO4wfiMLe1XQictsIlhErTufbWUsjOTZs=
 github.com/ChimeraCoder/tokenbucket v0.0.0-20131201223612-c5a927568de7/go.mod h1:b2EuEMLSG9q3bZ95ql1+8oVqzzrTNSiOQqSXWFBzxeI=
+github.com/HiWay-Media/meta-go-sdk v0.1.0 h1:xRq6nggZT5YM4/Oeylc/lkuPlzNb5lU/p0+3DAd8ja4=
+github.com/HiWay-Media/meta-go-sdk v0.1.0/go.mod h1:siYCtSsn3W4AlmofD4qcVqHcYQ9UjEKSGox/Rm69FNA=
 github.com/azr/backoff v0.0.0-20160115115103-53511d3c7330 h1:ekDALXAVvY/Ub1UtNta3inKQwZ/jMB/zpOtD8rAYh78=
 github.com/azr/backoff v0.0.0-20160115115103-53511d3c7330/go.mod h1:nH+k0SvAt3HeiYyOlJpLLv1HG1p7KWP7qU9QPp2/pCo=
 github.com/bwmarrin/discordgo v0.23.2 h1:BzrtTktixGHIu9Tt7dEE6diysEF9HWnXeHuoJEt2fH4=
@@ -23,6 +25,8 @@ github.com/garyburd/go-oauth v0.0.0-20180319155456-bca2e7f09a17 h1:GOfMz6cRgTJ9j
 github.com/garyburd/go-oauth v0.0.0-20180319155456-bca2e7f09a17/go.mod h1:HfkOCN6fkKKaPSAeNq/er3xObxTW4VLeY6UUK895gLQ=
 github.com/garyburd/go-oauth v0.0.0-20250708150529-9df1f1901ec1 h1:jTFDMvd2zOJV5n9e3H7rCjo7iNpXYWxzcJLd1E6Fu/A=
 github.com/garyburd/go-oauth v0.0.0-20250708150529-9df1f1901ec1/go.mod h1:575s/otOCpfMLZiVBG3buQQ4NV7ma1ewqZbNBJnHYyQ=
+github.com/go-resty/resty/v2 v2.15.3 h1:bqff+hcqAflpiF591hhJzNdkRsFhlB96CYfBwSFvql8=
+github.com/go-resty/resty/v2 v2.15.3/go.mod h1:0fHAoK7JoBy/Ch36N8VFeMsK7xQOHhvWaC3iOktwmIU=
 github.com/google/go-cmp v0.6.0/go.mod h1:17dUlkBOakJ0+DkrSSNjCkIjxS6bF9zb3elmeNGIjoY=
 github.com/google/pprof v0.0.0-20250317173921-a4b03ec1a45e/go.mod h1:boTsfXsheKC2y+lKOCMpSfarhxDeIzfZG1jqGcPl3cA=
 github.com/google/uuid v1.6.0 h1:NIvaJDMOsjHA8n1jAhLSgzrAzy1Hgr+hNrb57e+94F0=
@@ -33,6 +37,8 @@ github.com/gorilla/websocket v1.4.2 h1:+/TMaTYc4QFitKJxsQ7Yye35DkWvkdLcvGKqM+x0U
 github.com/gorilla/websocket v1.4.2/go.mod h1:YR8l580nyteQvAITg2hZ9XVh4b55+EU/adAjf1fMHhE=
 github.com/gorilla/websocket v1.5.3 h1:saDtZ6Pbx/0u+bgYQ3q96pZgCzfhKXGPqt7kZ72aNNg=
 github.com/gorilla/websocket v1.5.3/go.mod h1:YR8l580nyteQvAITg2hZ9XVh4b55+EU/adAjf1fMHhE=
+github.com/huandu/facebook/v2 v2.9.1 h1:REo8wQL2Yo/8J29WiiLRf7LAqwHlr72QnxZiEjvpVxE=
+github.com/huandu/facebook/v2 v2.9.1/go.mod h1:lk/dUK+JQuXylOhO+b6QtNJNpzo/C4wAasE+YHHZUf4=
 github.com/ianlancetaylor/demangle v0.0.0-20240312041847-bd984b5ce465/go.mod h1:gx7rwoVhcfuVKG5uya9Hs3Sxj7EIvldVofAWIUtGouw=
 github.com/jkershaw2000/go-tenor v0.0.0-20200728191921-3f3fd5c10bc8 h1:CZm/TExOTuOuMkEva9t9xzzzWwpFpxjP6feCLV7qkhk=
 github.com/jkershaw2000/go-tenor v0.0.0-20200728191921-3f3fd5c10bc8/go.mod h1:38lWoKyYeZ4qFsFxH0KOWvHH8nrM17escj5li1kSVa0=
@@ -91,6 +97,8 @@ golang.org/x/net v0.40.0/go.mod h1:y0hY0exeL2Pku80/zKK7tpntoX23cqL3Oa6njdgRtds=
 golang.org/x/net v0.41.0/go.mod h1:B/K4NNqkfmg07DQYrbwvSluqCJOOXwUjeb/5lOisjbA=
 golang.org/x/net v0.47.0 h1:Mx+4dIFzqraBXUugkia1OOvlD6LemFo1ALMHjrXDOhY=
 golang.org/x/net v0.47.0/go.mod h1:/jNxtkgq5yWUGYkaZGqo27cfGZ1c5Nen03aYrrKpVRU=
+golang.org/x/oauth2 v0.23.0 h1:PbgcYx2W7i4LvjJWEbf0ngHV6qJYr86PkAV3bXdLEbs=
+golang.org/x/oauth2 v0.23.0/go.mod h1:XYTD2NtWslqkgxebSiOHnXEap4TF09sJSc7H1sXbhtI=
 golang.org/x/sync v0.0.0-20190423024810-112230192c58/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
 golang.org/x/sync v0.0.0-20220722155255-886fb9371eb4/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
 golang.org/x/sync v0.1.0/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=

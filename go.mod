@@ -12,7 +12,14 @@ require (
 )
 
 require (
+	github.com/go-resty/resty/v2 v2.15.3 // indirect
+	github.com/huandu/facebook/v2 v2.9.1 // indirect
+	golang.org/x/oauth2 v0.23.0 // indirect
+)
+
+require (
 	github.com/ChimeraCoder/tokenbucket v0.0.0-20131201223612-c5a927568de7 // indirect
+	github.com/HiWay-Media/meta-go-sdk v0.1.0
 	github.com/azr/backoff v0.0.0-20160115115103-53511d3c7330 // indirect
 	github.com/chzyer/logex v1.2.1 // indirect
 	github.com/chzyer/readline v1.5.1 // indirect

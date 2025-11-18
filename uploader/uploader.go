@@ -6,52 +6,68 @@ import (
 	"net/http"
 	"shitposter-bot/database"
 	"shitposter-bot/hasher"
+	"shitposter-bot/instagram"
 	"shitposter-bot/shared"
-	"shitposter-bot/twitter"
 )
 
 func upload_video(author string, text string, url string) bool {
-	if media_bytes, ok := retrieve_data_as_bytes(url); ok {
-		//check hash
-		hash := hasher.Byte2Sha256(media_bytes)
-		if database.AssetAlreadyUploaded(hash, url) {
-			return false
-		}
+	// Encode to base64 and hash, check if already uploaded
+	mediaEncodedBase64, base64Ok := retrieve_media_as_base64(url)
 
-		if tweet_id, ok := twitter.TweetVideo(author, text, media_bytes); ok {
-			//the video hasnt been uploaded, we save it to the database
-			register_upload(author, tweet_id, hash, url)
-			fmt.Println("Tweeted video", hash, text)
-			return true
-		}
+	if !base64Ok {
+		fmt.Println("failed to retrieve media as base64")
+		return false
+	}
+
+	// hash and check if already uploaded
+	hash := hasher.String2Sha256(mediaEncodedBase64)
+
+	if database.AssetAlreadyUploaded(hash, url) {
+		return false
+	}
+
+	// post to ig
+	instagramMediaId, instagramOk := instagram.PostVideo(author, text, url)
+
+	if instagramOk {
+		register_upload(author, instagramMediaId, hash, url)
+		return true
 	}
 
 	return false
 }
 
 func upload_image(author string, text string, url string) bool {
-	if media_encoded_base64, ok := retrieve_media_as_base64(url); ok {
-		//check hash
-		hash := hasher.String2Sha256(media_encoded_base64)
-		if database.AssetAlreadyUploaded(hash, url) {
-			return false
-		}
+	// Encode to base64 and hash, check if already uploaded
+	mediaEncodedBase64, base64Ok := retrieve_media_as_base64(url)
 
-		if tweet_id, ok := twitter.TweetImage(author, text, media_encoded_base64); ok {
-			//the image hasnt been uploaded, we save it to the database
-			register_upload(author, tweet_id, hash, url)
-			fmt.Println("Tweeted image", hash, text)
-			return true
-		}
+	if !base64Ok {
+		fmt.Println("failed to retrieve media as base64")
+		return false
+	}
+
+	// hash and check if already uploaded
+	hash := hasher.String2Sha256(mediaEncodedBase64)
+
+	if database.AssetAlreadyUploaded(hash, url) {
+		return false
+	}
+
+	// post to ig and other media
+	instagramMediaId, instagramOk := instagram.PostImage(author, text, url)
+
+	if instagramOk {
+		register_upload(author, instagramMediaId, hash, url)
+		return true
 	}
 
 	return false
 }
 
-func register_upload(author string, tweet_id int64, hash string, url string) {
+func register_upload(author string, media_id string, hash string, url string) {
 	media_info := database.MediaInfo{
 		Author:    author,
-		TweetID:   tweet_id,
+		MediaID:   media_id,
 		MediaHash: hash,
 		MediaURL:  url,
 	}
@@ -59,7 +75,7 @@ func register_upload(author string, tweet_id int64, hash string, url string) {
 	database.SaveMediaInfo(media_info)
 }
 
-//gets a URL image from the web and returns the base64 equivalent
+// gets a URL image from the web and returns the base64 equivalent
 func retrieve_media_as_base64(url string) (string, bool) {
 	resp, err := http.Get(url)
 	if shared.CheckError(err) || resp.StatusCode != http.StatusOK {

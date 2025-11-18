@@ -8,6 +8,7 @@ import (
 
 	"shitposter-bot/database"
 	"shitposter-bot/discord"
+	"shitposter-bot/instagram"
 	"shitposter-bot/shared"
 	"shitposter-bot/tenor"
 
@@ -23,16 +24,21 @@ func init() {
 }
 
 func main() {
-	database_path := os.Getenv("DB_PATH")
-	discord_token := os.Getenv("DISCORD_TOKEN")
+	databasePath := os.Getenv("DB_PATH")
+	discordToken := os.Getenv("DISCORD_TOKEN")
 
 	//social networks TODO: remove this and make it modular
-	tenor_token := os.Getenv("TENOR_TOKEN")
+	tenorToken := os.Getenv("TENOR_TOKEN")
+	instagramAppId := os.Getenv("IG_APPID")
+	instagramAppSecret := os.Getenv("IG_APPSECRET")
+	instagramToken := os.Getenv("IG_TOKEN")
+	instagramUserId := os.Getenv("IG_USERID")
 
-	database.Start(database_path)
-	tenor.Start(tenor_token)
+	database.Start(databasePath)
+	tenor.Start(tenorToken)
 	//go twitter.Start(tw_access_token, tw_access_token_secret, tw_consumer_key, tw_consumer_key_secret)
-	go discord.Start(discord_token)
+	go instagram.Start(instagramAppId, instagramAppSecret, instagramToken, instagramUserId)
+	go discord.Start(discordToken)
 
 	//wait until we want to stop the program
 	chnl := make(chan os.Signal, 1)
@@ -42,5 +48,6 @@ func main() {
 	//stop and close
 	discord.Stop()
 	//twitter.Stop()
+	instagram.Stop()
 	database.Close()
 }
