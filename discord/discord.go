@@ -14,16 +14,16 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-//utf8 emojis used to comunicate with the bot
+// utf8 emojis used to comunicate with the bot
 const UPLOAD_EMOJI = "\xE2\xAC\x86"
 const CHECK_MARK_EMOJI = "\xE2\x9C\x85"
 const ALARM_CLOCK_EMOJI = "\xE2\x8F\xB0"
 const ERROR_EMOJI = "\xE2\x9D\x8C"
 
-//keyword used to prevent an asset from being marked ass uploadable
+// keyword used to prevent an asset from being marked ass uploadable
 const CANCEL_KEYWORD = "ANTIFUNA"
 
-//discord client connection
+// discord client connection
 var client *discordgo.Session
 
 func create_commands() {
@@ -44,7 +44,7 @@ func add_command_handlers() {
 	})
 }
 
-//starts the listening
+// starts the listening
 func start_connection(token string) {
 	var err error
 	client, err = discordgo.New("Bot " + token)
@@ -68,12 +68,12 @@ func start_connection(token string) {
 	fmt.Println("Shitposter Bot Discord is now up and running")
 }
 
-//called when the bot connects to a guild
+// called when the bot connects to a guild
 func guild_create(s *discordgo.Session, m *discordgo.GuildCreate) {
 	fmt.Printf("Connected to server %s\n", m.Name)
 }
 
-//called when a client sends a message
+// called when a client sends a message
 func message_create(s *discordgo.Session, m *discordgo.MessageCreate) {
 	//check if the author of the message is an user
 	if m.Author.Bot {
@@ -88,6 +88,7 @@ func message_create(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	if url, text, ok := get_media_url_text(m); ok {
+		fmt.Println(url)
 		mime := shared.GetContentType(url)
 
 		if !strings.Contains(mime, "image") && !strings.Contains(mime, "video") {
@@ -113,7 +114,7 @@ func message_create(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 }
 
-//called when a message is given a reaction
+// called when a message is given a reaction
 func message_reaction_add(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
 	if m.UserID == s.State.User.ID {
 		return
@@ -135,14 +136,14 @@ func message_reaction_add(s *discordgo.Session, m *discordgo.MessageReactionAdd)
 	}
 }
 
-//turns the discord text, wich might containt weird emoji encoding or user data to a human readable format
+// turns the discord text, wich might containt weird emoji encoding or user data to a human readable format
 func parse_text(src string) string {
 	reg := regexp.MustCompile(`<[@|:](.*?)>`)
 	src = reg.ReplaceAllString(src, "")
 	return src
 }
 
-//returns the media url from a discord message
+// returns the media url from a discord message
 func get_media_url_text(m *discordgo.MessageCreate) (string, string, bool) {
 	msg_fields := strings.Fields(m.Content)
 	msg_len := len(msg_fields)
@@ -176,7 +177,7 @@ func get_media_url_text(m *discordgo.MessageCreate) (string, string, bool) {
 	return "", "", false
 }
 
-//returns the username of a userid
+// returns the username of a userid
 func get_username(userid string) string {
 	user, err := client.User(userid)
 
@@ -187,7 +188,7 @@ func get_username(userid string) string {
 	return user.Username
 }
 
-//safe function for adding reactions to messages
+// safe function for adding reactions to messages
 func add_reaction(channelID string, messageID string, emoji string) bool {
 	m, err := client.ChannelMessage(channelID, messageID)
 	if err == nil {
