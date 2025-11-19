@@ -13,7 +13,7 @@ var database *sql.DB
 
 type MediaInfo struct {
 	Author    string
-	MediaID   string
+	PostID    string
 	MediaHash string
 	MediaURL  string
 }
@@ -28,7 +28,7 @@ func Start(database_path string) {
 	database = d
 
 	//create table
-	res, err := database.Exec("CREATE TABLE IF NOT EXISTS media_info (author TEXT, media_id TEXT, media_hash TEXT UNIQUE, media_url TEXT UNIQUE);")
+	res, err := database.Exec("CREATE TABLE IF NOT EXISTS media_info (author TEXT, post_id TEXT, media_hash TEXT UNIQUE, media_url TEXT UNIQUE);")
 	if shared.CheckError(err) {
 		log.Fatal(res)
 	}
@@ -38,7 +38,7 @@ func Start(database_path string) {
 
 // saves a media info struct on the database
 func SaveMediaInfo(info MediaInfo) {
-	_, err := database.Exec(fmt.Sprintf("INSERT INTO media_info(author, media_id, media_hash, media_url) VALUES ('%s', %s, '%s', '%s');", info.Author, info.MediaID, info.MediaHash, info.MediaURL))
+	_, err := database.Exec(fmt.Sprintf("INSERT INTO media_info(author, post_id, media_hash, media_url) VALUES ('%s', '%s', '%s', '%s');", info.Author, info.PostID, info.MediaHash, info.MediaURL))
 	fmt.Println("Saved new media info:", info)
 	shared.CheckError(err)
 }

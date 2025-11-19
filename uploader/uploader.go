@@ -27,10 +27,10 @@ func upload_video(author string, text string, url string, caption string) bool {
 	}
 
 	// post to ig
-	instagramMediaId, instagramOk := instagram.PostVideo(author, text, url, caption)
+	instagramPostID, instagramOk := instagram.PostVideo(author, text, url, caption)
 
 	if instagramOk {
-		register_upload(author, instagramMediaId, hash, url)
+		register_upload(author, instagramPostID, hash, url)
 		return true
 	}
 
@@ -54,20 +54,20 @@ func upload_image(author string, text string, url string, caption string) bool {
 	}
 
 	// post to ig and other media
-	instagramMediaId, instagramOk := instagram.PostImage(author, text, url, caption)
+	instagramPostID, instagramOk := instagram.PostImage(author, text, url, caption)
 
 	if instagramOk {
-		register_upload(author, instagramMediaId, hash, url)
+		register_upload(author, instagramPostID, hash, url)
 		return true
 	}
 
 	return false
 }
 
-func register_upload(author string, media_id string, hash string, url string) {
+func register_upload(author string, post_id string, hash string, url string) {
 	media_info := database.MediaInfo{
 		Author:    author,
-		MediaID:   media_id,
+		PostID:    post_id,
 		MediaHash: hash,
 		MediaURL:  url,
 	}
