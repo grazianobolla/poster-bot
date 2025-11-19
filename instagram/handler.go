@@ -42,9 +42,11 @@ func PostImage(author string, text string, url string, caption string) (string, 
 
 func PostVideo(author string, text string, url string, caption string) (string, bool) {
 	containerId, err := createContainerVideo(url, caption)
-	fmt.Println("Ig: generated containerId for video ", containerId, " waiting 1 minute...")
+	fmt.Println("Ig: generated containerId for video ", containerId, " waiting 30 seconds...")
 
 	for i := 0; i < 10; i++ {
+		time.Sleep(30 * time.Second)
+
 		status, err := checkMediaStatus(containerId)
 
 		if shared.CheckError(err) {
@@ -60,8 +62,6 @@ func PostVideo(author string, text string, url string, caption string) (string, 
 		if status == "ERROR" {
 			return "", false
 		}
-
-		time.Sleep(1 * time.Minute)
 	}
 
 	if shared.CheckError(err) {
