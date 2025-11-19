@@ -10,7 +10,7 @@ import (
 	"shitposter-bot/shared"
 )
 
-func upload_video(author string, text string, url string) bool {
+func upload_video(author string, text string, url string, caption string) bool {
 	// Encode to base64 and hash, check if already uploaded
 	mediaEncodedBase64, base64Ok := retrieve_media_as_base64(url)
 
@@ -27,7 +27,7 @@ func upload_video(author string, text string, url string) bool {
 	}
 
 	// post to ig
-	instagramMediaId, instagramOk := instagram.PostVideo(author, text, url)
+	instagramMediaId, instagramOk := instagram.PostVideo(author, text, url, caption)
 
 	if instagramOk {
 		register_upload(author, instagramMediaId, hash, url)
@@ -37,7 +37,7 @@ func upload_video(author string, text string, url string) bool {
 	return false
 }
 
-func upload_image(author string, text string, url string) bool {
+func upload_image(author string, text string, url string, caption string) bool {
 	// Encode to base64 and hash, check if already uploaded
 	mediaEncodedBase64, base64Ok := retrieve_media_as_base64(url)
 
@@ -54,7 +54,7 @@ func upload_image(author string, text string, url string) bool {
 	}
 
 	// post to ig and other media
-	instagramMediaId, instagramOk := instagram.PostImage(author, text, url)
+	instagramMediaId, instagramOk := instagram.PostImage(author, text, url, caption)
 
 	if instagramOk {
 		register_upload(author, instagramMediaId, hash, url)

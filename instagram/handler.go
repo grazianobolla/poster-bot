@@ -21,40 +21,44 @@ func Stop() {
 	fmt.Println("Shitposter Bot Twitter stopped running")
 }
 
-func PostImage(author string, text string, url string) (string, bool) {
-	mediaId, err := createContainerImage(url)
-	fmt.Println("Ig: generated mediaId for image ", mediaId, " waiting 10 seconds...")
+func PostImage(author string, text string, url string, caption string) (string, bool) {
+	containerId, err := createContainerImage(url, caption)
+	fmt.Println("Ig: generated containerId for image ", containerId, " waiting 10 seconds...")
 	time.Sleep(10 * time.Second)
 
 	if shared.CheckError(err) {
 		return "", false
 	}
 
-	err = publishMedia(mediaId)
+	err = publishMedia(containerId)
 
 	if !shared.CheckError(err) {
 		fmt.Println("Ig: Posted image to Instagram", author, text, url)
-		return mediaId, true
+		return containerId, true
 	}
 
 	return "", false
 }
 
-func PostVideo(author string, text string, url string) (string, bool) {
-	mediaId, err := createContainerVideo(url)
-	fmt.Println("Ig: generated mediaId for video ", mediaId, " waiting 1 minute...")
+func PostVideo(author string, text string, url string, caption string) (string, bool) {
+	containerId, err := createContainerVideo(url, caption)
+	fmt.Println("Ig: generated containerId for video ", containerId, " waiting 1 minute...")
 
 	for i := 0; i < 10; i++ {
-		status, err := checkMediaStatus(mediaId)
+		status, err := checkMediaStatus(containerId)
 
 		if shared.CheckError(err) {
 			return "", false
 		}
 
-		fmt.Println("Checking status for", mediaId, "result:", status)
+		fmt.Println("Checking status for", containerId, "result:", status)
 
 		if status == "FINISHED" {
 			break
+		}
+
+		if status == "ERROR" {
+			return "", false
 		}
 
 		time.Sleep(1 * time.Minute)
@@ -64,11 +68,11 @@ func PostVideo(author string, text string, url string) (string, bool) {
 		return "", false
 	}
 
-	err = publishMedia(mediaId)
+	err = publishMedia(containerId)
 
 	if !shared.CheckError(err) {
 		fmt.Println("Ig: Posted video to Instagram", author, text, url)
-		return mediaId, true
+		return containerId, true
 	}
 
 	return "", false

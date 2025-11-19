@@ -49,30 +49,30 @@ func publishMedia(mediaId string) error {
 	return nil
 }
 
-func createContainerImage(url string) (string, error) {
+func createContainerImage(url string, caption string) (string, error) {
 	result, err := session.Post(
 		fmt.Sprintf("/%s/media", instagramId),
-		fb.Params{"image_url": url},
+		fb.Params{"image_url": url, "caption": caption},
 	)
 
 	if shared.CheckError(err) {
 		return "", err
 	}
 
-	mediaId := result.GetField("id").(string)
-	return mediaId, nil
+	containerId := result.GetField("id").(string)
+	return containerId, nil
 }
 
-func createContainerVideo(url string) (string, error) {
+func createContainerVideo(url string, caption string) (string, error) {
 	result, err := session.Post(
 		fmt.Sprintf("/%s/media", instagramId),
-		fb.Params{"video_url": url, "media_type": "REELS"},
+		fb.Params{"video_url": url, "media_type": "REELS", "caption": caption},
 	)
 
 	if shared.CheckError(err) {
 		return "", err
 	}
 
-	mediaId := result.GetField("id").(string)
-	return mediaId, nil
+	containerId := result.GetField("id").(string)
+	return containerId, nil
 }

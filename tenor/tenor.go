@@ -49,7 +49,7 @@ func GetGIFbyURL(url string) (string, bool) {
 
 func getGifUrl(id string, token string) (string, error) {
 	// Replace with your own (safe) API key via env var if needed
-	url := fmt.Sprintf("https://tenor.googleapis.com/v2/posts?ids=%s&key=%s", id, token)
+	url := fmt.Sprintf("https://tenor.googleapis.com/v2/posts?ids=%s&key=%s&media_filter=minimal&limit=1", id, token)
 
 	// Make HTTP request
 	resp, err := http.Get(url)
@@ -82,7 +82,7 @@ func getGifUrl(id string, token string) (string, error) {
 	fmt.Println("Description:", post.ContentDescription)
 
 	// Access GIF (or other formats like tinygif, mp4, mediumgif)
-	if gif, ok := post.MediaFormats["tinymp4"]; ok {
+	if gif, ok := post.MediaFormats["mp4"]; ok {
 		return gif.URL, nil
 	}
 
