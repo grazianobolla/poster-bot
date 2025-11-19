@@ -11,6 +11,25 @@ import (
 var session *fb.Session
 var instagramId string
 
+func checkMediaStatus(mediaId string) (string, error) {
+	result, err := session.Get(
+		fmt.Sprintf("/%s", mediaId),
+		fb.Params{"fields": "status_code"},
+	)
+
+	if shared.CheckError(err) {
+		return "", err
+	}
+
+	status := result.GetField("status_code")
+
+	if status != nil {
+		return status.(string), nil
+	}
+
+	return "", nil
+}
+
 func publishMedia(mediaId string) error {
 	result, err := session.Post(
 		fmt.Sprintf("/%s/media_publish", instagramId),

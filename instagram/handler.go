@@ -23,8 +23,8 @@ func Stop() {
 
 func PostImage(author string, text string, url string) (string, bool) {
 	mediaId, err := createContainerImage(url)
-	fmt.Println("Ig: generated mediaId for image ", mediaId, " waiting 5 seconds...")
-	time.Sleep(5 * time.Second)
+	fmt.Println("Ig: generated mediaId for image ", mediaId, " waiting 10 seconds...")
+	time.Sleep(10 * time.Second)
 
 	if shared.CheckError(err) {
 		return "", false
@@ -42,8 +42,23 @@ func PostImage(author string, text string, url string) (string, bool) {
 
 func PostVideo(author string, text string, url string) (string, bool) {
 	mediaId, err := createContainerVideo(url)
-	fmt.Println("Ig: generated mediaId for video ", mediaId, " waiting 2 minutes...")
-	time.Sleep(2 * time.Minute)
+	fmt.Println("Ig: generated mediaId for video ", mediaId, " waiting 1 minute...")
+
+	for i := 0; i < 10; i++ {
+		status, err := checkMediaStatus(mediaId)
+
+		if shared.CheckError(err) {
+			return "", false
+		}
+
+		fmt.Println("Checking status for", mediaId, "result:", status)
+
+		if status == "FINISHED" {
+			break
+		}
+
+		time.Sleep(1 * time.Minute)
+	}
 
 	if shared.CheckError(err) {
 		return "", false
