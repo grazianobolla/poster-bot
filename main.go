@@ -24,7 +24,6 @@ func init() {
 }
 
 func main() {
-	databasePath := os.Getenv("DB_PATH")
 	discordToken := os.Getenv("DISCORD_TOKEN")
 
 	//social networks TODO: remove this and make it modular
@@ -34,7 +33,7 @@ func main() {
 	instagramToken := os.Getenv("IG_TOKEN")
 	instagramUserId := os.Getenv("IG_USERID")
 
-	database.Start(databasePath)
+	database.Start(os.Args[2])
 	tenor.Start(tenorToken)
 	//go twitter.Start(tw_access_token, tw_access_token_secret, tw_consumer_key, tw_consumer_key_secret)
 	go instagram.Start(instagramAppId, instagramAppSecret, instagramToken, instagramUserId)
