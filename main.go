@@ -17,7 +17,7 @@ import (
 
 func init() {
 	// loads values from .env into the system
-	err := godotenv.Load()
+	err := godotenv.Load(os.Args[1])
 	if shared.CheckError(err) {
 		log.Fatal("Couldn't load env file")
 	}
