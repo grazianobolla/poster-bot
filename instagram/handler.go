@@ -33,7 +33,7 @@ func PostImage(author string, text string, url string, caption string) (string, 
 	err = publishMedia(containerId)
 
 	if !shared.CheckError(err) {
-		fmt.Println("Ig: Posted image to Instagram", author, text, url)
+		fmt.Println("Ig: Posted image to Instagram", author, text, url, caption)
 		return containerId, true
 	}
 
@@ -71,7 +71,7 @@ func PostVideo(author string, text string, url string, caption string) (string, 
 	err = publishMedia(containerId)
 
 	if !shared.CheckError(err) {
-		fmt.Println("Ig: Posted video to Instagram", author, text, url)
+		fmt.Println("Ig: Posted video to Instagram", author, text, url, caption)
 		return containerId, true
 	}
 
