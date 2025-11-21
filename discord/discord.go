@@ -98,17 +98,25 @@ func message_reaction_add(s *discordgo.Session, m *discordgo.MessageReactionAdd)
 		return
 	}
 
-	//if we clicked the upload emoji, check if the asset exists and then upload
-	if m.Emoji.Name == UPLOAD_EMOJI {
-		if is_asset, asset := is_asset(m.MessageID); is_asset && !asset.Uploaded {
-			asset.Uploaded = true
+	if m.Emoji.User.ID == m.UserID {
+		return
+	}
 
-			if uploader.UploadAsset(asset.AuthorName, asset.Text, asset.Url) {
-				add_reaction(m.ChannelID, m.MessageID, CHECK_MARK_EMOJI)
-			} else {
-				add_reaction(m.ChannelID, m.MessageID, ERROR_EMOJI)
-			}
+	if m.Emoji.Name == UPLOAD_EMOJI {
+		isAsset, asset := is_asset(m.MessageID)
+		if !isAsset || asset.Uploaded {
+			return
 		}
+
+		asset.Uploaded = true
+
+		reaction := ERROR_EMOJI
+
+		if uploader.UploadAsset(asset.AuthorName, asset.Text, asset.Url) {
+			reaction = CHECK_MARK_EMOJI
+		}
+
+		add_reaction(m.ChannelID, m.MessageID, reaction)
 	}
 }
 
