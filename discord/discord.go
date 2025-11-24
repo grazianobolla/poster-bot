@@ -22,6 +22,7 @@ const ERROR_EMOJI = "\xE2\x9D\x8C"
 
 // keyword used to prevent an asset from being marked ass uploadable
 const CANCEL_KEYWORD = "ANTIFUNA"
+const CANCEL_KEYWORD2 = "AF"
 
 // discord client connection
 var client *discordgo.Session
@@ -60,10 +61,9 @@ func message_create(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	//check if the cancel keyword has been typed
-	for _, s := range strings.Fields(m.Content) {
-		if s == CANCEL_KEYWORD {
-			return
-		}
+	if strings.Contains(strings.ToLower(m.Content), strings.ToLower(CANCEL_KEYWORD)) ||
+		strings.Contains(strings.ToLower(m.Content), strings.ToLower(CANCEL_KEYWORD2)) {
+		return
 	}
 
 	if url, text, ok := get_media_url_text(m); ok {
