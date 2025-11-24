@@ -114,6 +114,7 @@ func message_reaction_add(s *discordgo.Session, m *discordgo.MessageReactionAdd)
 
 		if !shared.Contains(asset.UpvotedBy, upvoterId) {
 			asset.UpvotedBy = append(asset.UpvotedBy, upvoterId)
+			fmt.Println("Asset", asset.Url, "upvoted by", upvoterId)
 		}
 
 		//count instances
