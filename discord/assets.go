@@ -1,4 +1,4 @@
-//controls assets lifespan
+// controls assets lifespan
 package discord
 
 import (
@@ -18,18 +18,19 @@ type Asset struct {
 	Url          string
 	Text         string
 	Removal      bool
+	UpvotedBy    []string
 }
 
-//slice containing all current active assets
+// slice containing all current active assets
 var assets []Asset
 
-//starts the asset checker ticker
+// starts the asset checker ticker
 func destroy_ticker() {
 	ticker := time.NewTicker(time.Hour * ASSET_TICKER_FRECUENCY_HOURS)
 	go check_assets(ticker)
 }
 
-//checks if an asset should be removed
+// checks if an asset should be removed
 func check_assets(ticker *time.Ticker) {
 	for {
 		<-ticker.C
@@ -53,7 +54,7 @@ func check_assets(ticker *time.Ticker) {
 	}
 }
 
-//returns true and the asset pointer if a message is an asset
+// returns true and the asset pointer if a message is an asset
 func is_asset(message_id string) (bool, *Asset) {
 	for i := range assets {
 		asset := &assets[i]

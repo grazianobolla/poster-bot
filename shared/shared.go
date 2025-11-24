@@ -1,4 +1,4 @@
-//common utilities
+// common utilities
 package shared
 
 import (
@@ -15,7 +15,7 @@ func CheckError(err error) bool {
 	return false
 }
 
-//byte[] to base64 string
+// byte[] to base64 string
 func ToBase64(b []byte) string {
 	return base64.StdEncoding.EncodeToString(b)
 }
@@ -28,4 +28,13 @@ func GetContentType(url string) string {
 
 	t := res.Header.Get("Content-Type")
 	return t
+}
+
+func Contains(slice []string, s string) bool {
+	for _, v := range slice {
+		if v == s {
+			return true
+		}
+	}
+	return false
 }

@@ -2,7 +2,8 @@ package discord
 
 import "fmt"
 
-func Start(token string) {
+func Start(token string, min_reactions_needed int) {
+	minReactionsNeeded = min_reactions_needed
 	go destroy_ticker()
 	start_connection(token)
 }

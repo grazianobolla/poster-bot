@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 	"os/signal"
+	"strconv"
 	"syscall"
 
 	"shitposter-bot/database"
@@ -24,20 +25,22 @@ func init() {
 }
 
 func main() {
-	discordToken := os.Getenv("DISCORD_TOKEN")
+	minReactionsNeeded, _ := strconv.Atoi(os.Getenv("MIN_REACTIONS_NEEDED"))
+	databasePath := os.Getenv("DATABASE_PATH")
 
 	//social networks TODO: remove this and make it modular
+	discordToken := os.Getenv("DISCORD_TOKEN")
 	tenorToken := os.Getenv("TENOR_TOKEN")
 	instagramAppId := os.Getenv("IG_APPID")
 	instagramAppSecret := os.Getenv("IG_APPSECRET")
 	instagramToken := os.Getenv("IG_TOKEN")
 	instagramUserId := os.Getenv("IG_USERID")
 
-	database.Start(os.Args[2])
+	database.Start(databasePath)
 	tenor.Start(tenorToken)
 	//go twitter.Start(tw_access_token, tw_access_token_secret, tw_consumer_key, tw_consumer_key_secret)
 	go instagram.Start(instagramAppId, instagramAppSecret, instagramToken, instagramUserId)
-	go discord.Start(discordToken)
+	go discord.Start(discordToken, minReactionsNeeded)
 
 	//wait until we want to stop the program
 	chnl := make(chan os.Signal, 1)

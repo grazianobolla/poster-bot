@@ -25,6 +25,7 @@ const CANCEL_KEYWORD = "ANTIFUNA"
 
 // discord client connection
 var client *discordgo.Session
+var minReactionsNeeded int
 
 // starts the listening
 func start_connection(token string) {
@@ -102,21 +103,31 @@ func message_reaction_add(s *discordgo.Session, m *discordgo.MessageReactionAdd)
 		return
 	}
 
+	isAsset, asset := is_asset(m.MessageID)
+	if !isAsset || asset.Uploaded {
+		return
+	}
+
 	if m.Emoji.Name == UPLOAD_EMOJI {
-		isAsset, asset := is_asset(m.MessageID)
-		if !isAsset || asset.Uploaded {
-			return
+		// add upvoter if not added yet
+		upvoterId := m.Emoji.User.ID
+
+		if !shared.Contains(asset.UpvotedBy, upvoterId) {
+			asset.UpvotedBy = append(asset.UpvotedBy, upvoterId)
 		}
 
-		asset.Uploaded = true
+		//count instances
+		if len(asset.UpvotedBy) >= minReactionsNeeded {
+			asset.Uploaded = true
 
-		reaction := ERROR_EMOJI
+			reaction := ERROR_EMOJI
 
-		if uploader.UploadAsset(asset.AuthorName, asset.Text, asset.Url) {
-			reaction = CHECK_MARK_EMOJI
+			if uploader.UploadAsset(asset.AuthorName, asset.Text, asset.Url) {
+				reaction = CHECK_MARK_EMOJI
+			}
+
+			add_reaction(m.ChannelID, m.MessageID, reaction)
 		}
-
-		add_reaction(m.ChannelID, m.MessageID, reaction)
 	}
 }
 
