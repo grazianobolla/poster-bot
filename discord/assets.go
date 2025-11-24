@@ -13,6 +13,7 @@ type Asset struct {
 	MessageID    string
 	ChannelID    string
 	AuthorName   string
+	AuthorID     string
 	CreationTime time.Time
 	Uploaded     bool
 	Url          string

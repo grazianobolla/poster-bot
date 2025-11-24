@@ -8,7 +8,7 @@ import (
 
 var sha256_hasher = sha256.New()
 
-//hashes byte array to sha256
+// hashes byte array to sha256
 func Byte2Sha256(data []byte) string {
 	sha256_hasher.Reset()
 	_, err := sha256_hasher.Write(data)

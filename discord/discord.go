@@ -86,6 +86,7 @@ func message_create(s *discordgo.Session, m *discordgo.MessageCreate) {
 			Uploaded:     false,
 			Url:          url,
 			Text:         parse_text(text),
+			AuthorID:     m.Author.ID,
 		}
 
 		assets = append(assets, temp_asset)
@@ -95,40 +96,47 @@ func message_create(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 // called when a message is given a reaction
 func message_reaction_add(s *discordgo.Session, m *discordgo.MessageReactionAdd) {
-	if m.UserID == s.State.User.ID {
+	upvoterId := m.UserID
+	botId := s.State.User.ID
+
+	// check if valid emoji
+	if m.Emoji.Name != UPLOAD_EMOJI {
 		return
 	}
 
-	if m.Emoji.User.ID == m.UserID {
+	// check if we are the bot
+	if upvoterId == botId {
 		return
 	}
 
+	// check if valid asset
 	isAsset, asset := is_asset(m.MessageID)
 	if !isAsset || asset.Uploaded {
 		return
 	}
 
-	if m.Emoji.Name == UPLOAD_EMOJI {
-		// add upvoter if not added yet
-		upvoterId := m.Emoji.User.ID
+	// check if we are upvoting ourselves
+	if upvoterId == asset.AuthorID {
+		return
+	}
 
-		if !shared.Contains(asset.UpvotedBy, upvoterId) {
-			asset.UpvotedBy = append(asset.UpvotedBy, upvoterId)
-			fmt.Println("Asset", asset.Url, "upvoted by", upvoterId)
+	// add upvoter if not added yet
+	if !shared.Contains(asset.UpvotedBy, upvoterId) {
+		asset.UpvotedBy = append(asset.UpvotedBy, upvoterId)
+		fmt.Println("Asset", asset.MessageID, "upvoted by", upvoterId)
+	}
+
+	//count instances and upload if needed
+	if len(asset.UpvotedBy) >= minReactionsNeeded {
+		asset.Uploaded = true
+
+		reaction := ERROR_EMOJI
+
+		if uploader.UploadAsset(asset.AuthorName, asset.Text, asset.Url) {
+			reaction = CHECK_MARK_EMOJI
 		}
 
-		//count instances
-		if len(asset.UpvotedBy) >= minReactionsNeeded {
-			asset.Uploaded = true
-
-			reaction := ERROR_EMOJI
-
-			if uploader.UploadAsset(asset.AuthorName, asset.Text, asset.Url) {
-				reaction = CHECK_MARK_EMOJI
-			}
-
-			add_reaction(m.ChannelID, m.MessageID, reaction)
-		}
+		add_reaction(m.ChannelID, m.MessageID, reaction)
 	}
 }
 
@@ -143,6 +151,7 @@ func parse_text(src string) string {
 func get_media_url_text(m *discordgo.MessageCreate) (string, string, bool) {
 	msg_fields := strings.Fields(m.Content)
 	msg_len := len(msg_fields)
+
 	//for files
 	if len(m.Attachments) > 0 {
 		return m.Attachments[0].URL, m.Content, true
